@@ -4,7 +4,13 @@ import fetch from "node-fetch";
 export async function main(
   event: APIGatewayEvent
 ): Promise<APIGatewayProxyResultV2> {
-  const body: FormBody = JSON.parse(JSON.stringify({ body: event.body }));
+  if (!event.body) {
+    return {
+      body: "Empty request",
+      statusCode: 400,
+    };
+  }
+  const body: FormBody = JSON.parse(event.body);
 
   const postNewJotform = await fetch(getJotformUrl(body), {
     method: "POST",
@@ -12,6 +18,8 @@ export async function main(
       "Content-Type": "application/json",
     },
   });
+
+  console.log(postNewJotform);
 
   //move the new jotform to the cuf folder
   // await fetch(`
@@ -30,6 +38,7 @@ export async function main(
   };
 
   function getJotformUrl(body: FormBody): string {
+    console.log(body);
     //base path + api key
     let newJotformUrl = [
       `${process.env.JOTFORM_API_HOST}/form?
@@ -46,7 +55,7 @@ export async function main(
     questions: QuestionCustomUserFields[]
   ): string {
     let stringified = "";
-    body.questions.forEach((question, index) => {
+    questions.forEach((question, index) => {
       const questionNumber = index + 1;
       switch (question.type) {
         case "select":
@@ -69,7 +78,7 @@ export async function main(
           questions[${questionNumber}][visibleOptions]=1&
           questions[${questionNumber}][width]=310&`;
           break;
-        case "multi-select":
+        case "multiselect":
           stringified += `
           questions[${questionNumber}][text]=${question.title}&
           questions[${questionNumber}][type]=control_checkbox&
@@ -114,7 +123,7 @@ export async function main(
       ? question.options.map((el) => el.value).join("|")
       : "0";
     let values = "";
-    if (question.type === "multi-select")
+    if (question.type === "multiselect")
       values = question.options
         ? question.options.map((el) => el.id).join("|")
         : "0";

@@ -1,11 +1,13 @@
-type QuestionCustomUserFields = {
+declare type QuestionCustomUserFields = {
   title: string;
   type: "select" | "multiselect" | "text";
   cufId: number;
-  options?: { id: number; value: string }[];
+  options?: {
+    id: number;
+    value: string;
+  }[];
 };
-
-type FormBody = {
+declare type FormBody = {
   title: string;
   questions: QuestionCustomUserFields[];
 };
