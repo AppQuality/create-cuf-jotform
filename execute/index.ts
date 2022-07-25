@@ -1,6 +1,7 @@
 import { APIGatewayEvent } from "aws-lambda";
 
 const body = JSON.stringify({
+  title: "My title",
   questions: [
     {
       title: "Quale è il tuo nome?",
