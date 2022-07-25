@@ -12,7 +12,7 @@
     "bootstrap": "cdk bootstrap",
     "deploy": "cdk deploy",
     "destroy": "cdk destroy",
-    "execute": "npm run build && node execute/index.js"
+    "execute": "npm run build && node --enable-source-maps execute/index.js"
   },
   "devDependencies": {
     "@types/aws-lambda": "^8.10.92",
