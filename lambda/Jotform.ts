@@ -100,7 +100,11 @@ class Jotform {
       useCalculations: "Yes",
       visibleOptions: "1",
       width: "310",
-      ...this.selectOptionsAndValues(question.options),
+      options: this.convertListToPipedString(question.options, "name"),
+      calcValues: this.convertListToPipedString(
+        [{ id: "0" }, ...question.options],
+        "id"
+      ),
     };
   }
   private multiselectFormQuestions(
@@ -122,7 +126,8 @@ class Jotform {
       special: "None",
       otherText: "Other",
       spreadCols: "3",
-      ...this.multiSelectOptionsAndValues(question.options),
+      options: this.convertListToPipedString(question.options, "name"),
+      calcValues: this.convertListToPipedString(question.options, "id"),
     };
   }
   private textFormQuestions(
@@ -175,33 +180,13 @@ class Jotform {
     return result;
   }
 
-  private selectOptionsAndValues(options: QuestionCustomUserFields["options"]) {
-    let results = {
-      options: "0",
-      calcValues: "0",
-    };
-    if (options) {
-      results.options = options.map((el) => el.name).join("|");
-      results.calcValues = [{ id: "0" }, ...options]
-        .map((el) => el.id)
-        .join("|");
-    }
-    return results;
+  private convertListToPipedString(
+    list: { [key: string]: string | number }[],
+    key: string
+  ) {
+    return list.map((el) => el[key]).join("|");
   }
 
-  private multiSelectOptionsAndValues(
-    options: QuestionCustomUserFields["options"]
-  ) {
-    let results = {
-      options: "0",
-      calcValues: "0",
-    };
-    if (options) {
-      results.options = options.map((el) => el.name).join("|");
-      results.calcValues = options.map((el) => el.id).join("|");
-    }
-    return results;
-  }
   private formProperties(title: string) {
     return {
       title: title,
