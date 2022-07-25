@@ -89,7 +89,6 @@ require("dotenv").config();
 
 async function test() {
   const res = await main(event);
-  console.log(res);
 }
 
 test();
