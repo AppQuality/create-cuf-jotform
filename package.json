@@ -1,9 +1,6 @@
 {
-  "name": "generate-receipt",
+  "name": "generate-form",
   "version": "0.1.0",
-  "bin": {
-    "generate-receipt": "bin/generate-receipt.js"
-  },
   "scripts": {
     "prepare": "npx husky install",
     "build": "tsc",
@@ -35,6 +32,7 @@
     "aws-sdk": "^2.1080.0",
     "constructs": "^10.0.0",
     "dotenv": "^16.0.0",
+    "node-fetch": "^3.2.9",
     "source-map-support": "^0.5.16"
   }
 }
