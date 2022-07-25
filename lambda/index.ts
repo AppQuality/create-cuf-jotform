@@ -12,13 +12,20 @@ export async function main(
       statusCode: 500,
     };
   }
-  if (!event.body) {
+  let body: FormBody;
+  try {
+    if (!event.body) throw new Error("Empty body");
+    body = JSON.parse(event.body);
+    checkBodyStructure(body);
+  } catch (e) {
     return {
-      body: "Empty request",
+      body: JSON.stringify({
+        error: "INVALID_BODY",
+        message: (e as { message: string }).message,
+      }),
       statusCode: 400,
     };
   }
-  const body: FormBody = JSON.parse(event.body);
 
   const jotform = new Jotform(process.env.JOTFORM_API_KEY);
   await jotform.create(body);
@@ -31,4 +38,8 @@ export async function main(
     body: JSON.stringify({ body: event.body }),
     statusCode: 200,
   };
+
+  function checkBodyStructure(body: FormBody) {
+    if (!body.title) throw new Error("Title is required");
+  }
 }

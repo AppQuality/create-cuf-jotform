@@ -1,7 +1,6 @@
 import { APIGatewayEvent } from "aws-lambda";
 
 const body = JSON.stringify({
-  title: "My title",
   questions: [
     {
       title: "Quale è il tuo nome?",
@@ -89,6 +88,7 @@ require("dotenv").config();
 
 async function test() {
   const res = await main(event);
+  console.log(res);
 }
 
 test();
