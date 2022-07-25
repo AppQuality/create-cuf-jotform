@@ -181,7 +181,7 @@ class Jotform {
       calcValues: "0",
     };
     if (options) {
-      results.options = options.map((el) => el.value).join("|");
+      results.options = options.map((el) => el.name).join("|");
       results.calcValues = [{ id: "0" }, ...options]
         .map((el) => el.id)
         .join("|");
@@ -197,7 +197,7 @@ class Jotform {
       calcValues: "0",
     };
     if (options) {
-      results.options = options.map((el) => el.value).join("|");
+      results.options = options.map((el) => el.name).join("|");
       results.calcValues = options.map((el) => el.id).join("|");
     }
     return results;

@@ -13,8 +13,8 @@ const body = JSON.stringify({
       type: "multiselect",
       cufId: 2,
       options: [
-        { id: 1, value: "Banca1" },
-        { id: 2, value: "Banca2" },
+        { id: 1, name: "Banca1" },
+        { id: 2, name: "Banca2" },
       ],
     },
     {
@@ -22,8 +22,8 @@ const body = JSON.stringify({
       type: "select",
       cufId: 3,
       options: [
-        { id: 3, value: "0" },
-        { id: 4, value: "1000" },
+        { id: 3, name: "0" },
+        { id: 4, name: "1000" },
       ],
     },
   ],

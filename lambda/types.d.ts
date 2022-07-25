@@ -4,7 +4,7 @@ declare type QuestionCustomUserFields = {
   cufId: number;
   options?: {
     id: number;
-    value: string;
+    name: string;
   }[];
 };
 declare type FormBody = {

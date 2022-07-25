@@ -2,7 +2,7 @@ type QuestionCustomUserFields = {
   title: string;
   type: "select" | "multiselect" | "text";
   cufId: number;
-  options?: { id: number; value: string }[];
+  options?: { id: number; name: string }[];
 };
 
 type FormBody = {
