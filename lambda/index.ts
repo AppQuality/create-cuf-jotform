@@ -41,5 +41,16 @@ export async function main(
 
   function checkBodyStructure(body: FormBody) {
     if (!body.title) throw new Error("Title is required");
+    if (!body.questions) throw new Error("At least one question is required");
+    body.questions.forEach((question) => {
+      if (!question.title) throw new Error("Question title is required");
+      if (!question.type) throw new Error("Question type is required");
+      if (!question.cufId) throw new Error("CustomUserField_ID is required");
+      if (
+        (question.type === "select" || question.type === "multiselect") &&
+        !question.options
+      )
+        throw new Error("Question options are required");
+    });
   }
 }
