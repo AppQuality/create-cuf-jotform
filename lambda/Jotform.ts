@@ -70,7 +70,10 @@ class Jotform {
       `?` +
       this.serializeParameters({
         apiKey: this.apiKey,
-        questions: { ...this.getParameterFromQuestions(body.questions) },
+        questions: [
+          ...this.getParameterFromQuestions(body.questions),
+          this.getTesterIdHiddenQuestion(),
+        ],
         properties: { ...this.formProperties(body.title) },
       })
     );
@@ -78,19 +81,18 @@ class Jotform {
 
   private defaultQuestionOptions({
     title,
-    id,
+    name,
     order,
   }: {
     title: string;
-    id: number;
+    name: string;
     order: number;
   }) {
     return {
       text: title,
-      name: `cuf_${id}`,
+      name: name,
       order: order,
       labelAlign: "Auto",
-      required: "Yes",
     };
   }
 
@@ -101,12 +103,13 @@ class Jotform {
     return {
       ...this.defaultQuestionOptions({
         title: question.title,
-        id: question.cufId,
+        name: `cuf_${question.cufId}`,
         order: question.order,
       }),
       type: "control_dropdown",
       emptyText: "Seleziona qualcosa",
       useCalculations: "Yes",
+      required: "Yes",
       options: this.convertListToPipedString(question.options, "name"),
       calcValues: this.convertListToPipedString(
         [{ id: "0" }, ...question.options],
@@ -122,7 +125,7 @@ class Jotform {
     return {
       ...this.defaultQuestionOptions({
         title: question.title,
-        id: question.cufId,
+        name: `cuf_${question.cufId}`,
         order: question.order,
       }),
       type: "control_checkbox",
@@ -131,17 +134,29 @@ class Jotform {
       calcValues: this.convertListToPipedString(question.options, "id"),
     };
   }
-
+  private getTesterIdHiddenQuestion() {
+    return {
+      ...this.defaultQuestionOptions({
+        title: "Tester Id",
+        name: "testerId",
+        order: 1000,
+      }),
+      type: "control_textbox",
+      hidden: "Yes",
+      readonly: "Yes",
+    };
+  }
   private textFormQuestions(
     question: QuestionCustomUserFields & { order: number }
   ) {
     return {
       ...this.defaultQuestionOptions({
         title: question.title,
-        id: question.cufId,
+        name: `cuf_${question.cufId}`,
         order: question.order,
       }),
       type: "control_textbox",
+      required: "Yes",
     };
   }
 
