@@ -1,0 +1,5 @@
+{
+  "JOTFORM_API_KEY": "my-jotform-api-key",
+  "JOTFORM_API_HOST": "https://eu-api.jotform.com",
+  "JOTFORM_CUF_FOLDER_ID": "my-jotform-cuf-folder-id"
+}
