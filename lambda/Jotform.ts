@@ -12,7 +12,7 @@ class Jotform {
   }
 
   async create(body: FormBody) {
-    const response = await fetch(this.getJotformUrl(body), {
+    const response = await fetch(this.getCreateFormUrl(body), {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -64,13 +64,13 @@ class Jotform {
     );
   }
 
-  private getJotformUrl(body: FormBody): string {
+  private getCreateFormUrl(body: FormBody): string {
     return (
       this.formUrl +
       `?` +
       this.serializeParameters({
         apiKey: this.apiKey,
-        questions: { ...this.formQuestions(body.questions) },
+        questions: { ...this.getParameterFromQuestions(body.questions) },
         properties: { ...this.formProperties(body.title) },
       })
     );
@@ -95,15 +95,14 @@ class Jotform {
   }
 
   private selectFormQuestions(
-    questionNumber: number,
-    question: QuestionCustomUserFields
+    question: QuestionCustomUserFields & { order: number }
   ) {
     if (!question.options) throw new Error("No options provided");
     return {
       ...this.defaultQuestionOptions({
         title: question.title,
         id: question.cufId,
-        order: questionNumber,
+        order: question.order,
       }),
       type: "control_dropdown",
       emptyText: "Seleziona qualcosa",
@@ -115,16 +114,16 @@ class Jotform {
       ),
     };
   }
+
   private multiselectFormQuestions(
-    questionNumber: number,
-    question: QuestionCustomUserFields
+    question: QuestionCustomUserFields & { order: number }
   ) {
     if (!question.options) throw new Error("No options provided");
     return {
       ...this.defaultQuestionOptions({
         title: question.title,
         id: question.cufId,
-        order: questionNumber,
+        order: question.order,
       }),
       type: "control_checkbox",
       useCalculations: "Yes",
@@ -132,50 +131,36 @@ class Jotform {
       calcValues: this.convertListToPipedString(question.options, "id"),
     };
   }
+
   private textFormQuestions(
-    questionNumber: number,
-    question: QuestionCustomUserFields
+    question: QuestionCustomUserFields & { order: number }
   ) {
     return {
       ...this.defaultQuestionOptions({
         title: question.title,
         id: question.cufId,
-        order: questionNumber,
+        order: question.order,
       }),
       type: "control_textbox",
     };
   }
 
-  private formQuestions(questions: QuestionCustomUserFields[]) {
-    let result: { [key: number]: any } = {};
-    questions.forEach((question, index) => {
-      const questionNumber = index + 1;
-      switch (question.type) {
-        case "select":
-          result[questionNumber] = this.selectFormQuestions(
-            questionNumber,
-            question
-          );
-          break;
-        case "multiselect":
-          result[questionNumber] = this.multiselectFormQuestions(
-            questionNumber,
-            question
-          );
-
-          break;
-        case "text":
-          result[questionNumber] = this.textFormQuestions(
-            questionNumber,
-            question
-          );
-          break;
-        default:
-          break;
+  private getParameterFromQuestions(questions: QuestionCustomUserFields[]) {
+    const enhancedQuestions = questions.map((question, index) => ({
+      order: index,
+      ...question,
+    }));
+    return enhancedQuestions.map((question) => {
+      if (question.type === "select") {
+        return this.selectFormQuestions(question);
+      } else if (question.type === "multiselect") {
+        return this.multiselectFormQuestions(question);
+      } else if (question.type === "text") {
+        return this.textFormQuestions(question);
+      } else {
+        throw new Error("Unknown question type");
       }
     });
-
-    return result;
   }
 
   private convertListToPipedString(
