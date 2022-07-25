@@ -28,18 +28,4 @@ export async function main(
     body: JSON.stringify({ body: event.body }),
     statusCode: 200,
   };
-
-  async function moveFormToFolder(formId: string) {
-    var myHeaders = new Headers();
-    myHeaders.append("Content-Type", "application/json");
-    await fetch(
-      `
-    ${process.env.JOTFORM_API_HOST}/folder/${process.env.JOTFORM_CUF_FOLDER_ID}?apiKey=${process.env.JOTFORM_API_KEY}`,
-      {
-        method: "PUT",
-        headers: myHeaders,
-        body: JSON.stringify({ forms: [formId] }),
-      }
-    );
-  }
 }
