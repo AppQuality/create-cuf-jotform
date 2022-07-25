@@ -22,7 +22,6 @@ class Jotform {
     const results = await response.json();
     if (results.content.id) {
       this.formId = results.content.id;
-      await this.setThankYouPage();
       return results;
     }
     throw new Error("Failed to create form");
@@ -38,10 +37,9 @@ class Jotform {
       body: JSON.stringify({ forms: [this.formId] }),
     });
   }
-  private async setThankYouPage() {
+
+  public async setThankYouPage(redirectUrl: string) {
     if (!this.formId) throw new Error("No form id");
-    const redirectUrl =
-      "https://webhook.site/effd43fc-1cd5-4c03-9146-22a037eba368";
 
     const properties = {
       activeRedirect: "thankurl",
@@ -78,28 +76,38 @@ class Jotform {
     );
   }
 
+  private defaultQuestionOptions({
+    title,
+    id,
+    order,
+  }: {
+    title: string;
+    id: number;
+    order: number;
+  }) {
+    return {
+      text: title,
+      name: `cuf_${id}`,
+      order: order,
+      labelAlign: "Auto",
+      required: "Yes",
+    };
+  }
+
   private selectFormQuestions(
     questionNumber: number,
     question: QuestionCustomUserFields
   ) {
     if (!question.options) throw new Error("No options provided");
     return {
-      text: question.title,
+      ...this.defaultQuestionOptions({
+        title: question.title,
+        id: question.cufId,
+        order: questionNumber,
+      }),
       type: "control_dropdown",
-      name: `cuf_${question.cufId}`,
       emptyText: "Seleziona qualcosa",
-      required: "Yes",
-      autoFixed: "No",
-      labelAlign: "Auto",
-      multipleSelections: "No",
-      order: questionNumber,
-      searchText: "Search",
-      shuffle: "No",
-      size: "0",
-      special: "None",
       useCalculations: "Yes",
-      visibleOptions: "1",
-      width: "310",
       options: this.convertListToPipedString(question.options, "name"),
       calcValues: this.convertListToPipedString(
         [{ id: "0" }, ...question.options],
@@ -113,19 +121,13 @@ class Jotform {
   ) {
     if (!question.options) throw new Error("No options provided");
     return {
-      text: question.title,
+      ...this.defaultQuestionOptions({
+        title: question.title,
+        id: question.cufId,
+        order: questionNumber,
+      }),
       type: "control_checkbox",
-      name: `cuf_${question.cufId}`,
       useCalculations: "Yes",
-      required: "No",
-      readonly: "No",
-      labelAlign: "Auto",
-      multipleSelections: "No",
-      order: questionNumber,
-      shuffle: "No",
-      special: "None",
-      otherText: "Other",
-      spreadCols: "3",
       options: this.convertListToPipedString(question.options, "name"),
       calcValues: this.convertListToPipedString(question.options, "id"),
     };
@@ -135,16 +137,12 @@ class Jotform {
     question: QuestionCustomUserFields
   ) {
     return {
-      text: question.title,
+      ...this.defaultQuestionOptions({
+        title: question.title,
+        id: question.cufId,
+        order: questionNumber,
+      }),
       type: "control_textbox",
-      name: `cuf_${question.cufId}`,
-      order: questionNumber,
-      autoFixed: "No",
-      labelAlign: "Auto",
-      required: "No",
-      readonly: "No",
-      size: "310",
-      validation: "None",
     };
   }
 

@@ -22,6 +22,9 @@ export async function main(
 
   const jotform = new Jotform(process.env.JOTFORM_API_KEY);
   await jotform.create(body);
+  await jotform.setThankYouPage(
+    "https://webhook.site/effd43fc-1cd5-4c03-9146-22a037eba368"
+  );
   await jotform.moveToFolder(process.env.JOTFORM_CUF_FOLDER_ID);
 
   return {
