@@ -1,5 +1,5 @@
 import { Duration, Stack, StackProps } from "aws-cdk-lib";
-import { LambdaRestApi } from "aws-cdk-lib/aws-apigateway";
+import { LambdaIntegration, RestApi, Cors } from "aws-cdk-lib/aws-apigateway";
 import { Vpc } from "aws-cdk-lib/aws-ec2";
 import { Role, ServicePrincipal } from "aws-cdk-lib/aws-iam";
 import { Runtime } from "aws-cdk-lib/aws-lambda";
@@ -57,8 +57,15 @@ export class ApiGatewayLambdaStack extends Stack {
       },
     });
 
-    const api = new LambdaRestApi(this, `${config?.projectName}-api`, {
-      handler: lambda,
+    const restApi = new RestApi(this, `${config?.projectName}-api`, {
+      description: `${config?.projectName}-api`,
+      defaultCorsPreflightOptions: {
+        allowOrigins: Cors.ALL_ORIGINS,
+        allowMethods: Cors.ALL_METHODS,
+        allowHeaders: Cors.DEFAULT_HEADERS,
+      },
     });
+    const jotform = restApi.root.addResource("jotform");
+    jotform.addMethod("POST", new LambdaIntegration(lambda));
   }
 }

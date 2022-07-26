@@ -3,6 +3,11 @@ import { Response } from "aws-sdk";
 import fetch, { Headers } from "node-fetch";
 import Jotform from "./Jotform";
 
+const defaultHeaders = {
+  "Access-Control-Allow-Headers": "Content-Type",
+  "Access-Control-Allow-Origin": "*",
+  "Access-Control-Allow-Methods": "OPTIONS,POST,GET",
+};
 export async function main(
   event: APIGatewayEvent
 ): Promise<APIGatewayProxyResultV2> {
@@ -13,6 +18,7 @@ export async function main(
   ) {
     return {
       body: "Jotform is not configured",
+      headers: defaultHeaders,
       statusCode: 500,
     };
   }
@@ -27,6 +33,7 @@ export async function main(
         error: "INVALID_BODY",
         message: (e as { message: string }).message,
       }),
+      headers: defaultHeaders,
       statusCode: 400,
     };
   }
@@ -39,6 +46,7 @@ export async function main(
     body: JSON.stringify({
       url: `${jotform.jotformUrl}?testerId={Profile.id}`,
     }),
+    headers: defaultHeaders,
     statusCode: 200,
   };
 
