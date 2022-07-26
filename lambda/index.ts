@@ -33,9 +33,10 @@ export async function main(
     "https://webhook.site/effd43fc-1cd5-4c03-9146-22a037eba368"
   );
   await jotform.moveToFolder(process.env.JOTFORM_CUF_FOLDER_ID);
-
   return {
-    body: JSON.stringify({ body: event.body }),
+    body: JSON.stringify({
+      url: `${jotform.jotformUrl}?testerId={Profile.id}`,
+    }),
     statusCode: 200,
   };
 

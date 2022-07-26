@@ -5,6 +5,7 @@ class Jotform {
   private formUrl: string;
   private folderUrl: string;
   private formId: string | undefined;
+  public jotformUrl: string | undefined;
   constructor(private apiKey: string) {
     this.baseUrl = `${process.env.JOTFORM_API_HOST}`;
     this.formUrl = `${this.baseUrl}/form`;
@@ -22,6 +23,7 @@ class Jotform {
     const results = await response.json();
     if (results.content.id) {
       this.formId = results.content.id;
+      this.jotformUrl = `https://eu.jotform.com/${this.formId}`;
       return results;
     }
     throw new Error("Failed to create form");
