@@ -6,7 +6,11 @@ import Jotform from "./Jotform";
 export async function main(
   event: APIGatewayEvent
 ): Promise<APIGatewayProxyResultV2> {
-  if (!process.env.JOTFORM_API_KEY || !process.env.JOTFORM_CUF_FOLDER_ID) {
+  if (
+    !process.env.JOTFORM_API_KEY ||
+    !process.env.JOTFORM_CUF_FOLDER_ID ||
+    !process.env.THANKYOU_PAGE_REDIRECT_URL
+  ) {
     return {
       body: "Jotform is not configured",
       statusCode: 500,
@@ -29,9 +33,7 @@ export async function main(
 
   const jotform = new Jotform(process.env.JOTFORM_API_KEY);
   await jotform.create(body);
-  await jotform.setThankYouPage(
-    "https://webhook.site/effd43fc-1cd5-4c03-9146-22a037eba368"
-  );
+  await jotform.setThankYouPage(process.env.THANKYOU_PAGE_REDIRECT_URL);
   await jotform.moveToFolder(process.env.JOTFORM_CUF_FOLDER_ID);
   return {
     body: JSON.stringify({
