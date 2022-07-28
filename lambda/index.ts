@@ -1,6 +1,4 @@
 import { APIGatewayProxyResultV2, APIGatewayEvent } from "aws-lambda";
-import { Response } from "aws-sdk";
-import fetch, { Headers } from "node-fetch";
 import Jotform from "./Jotform";
 
 const defaultHeaders = {
