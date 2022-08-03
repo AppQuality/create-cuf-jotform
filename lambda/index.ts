@@ -42,7 +42,7 @@ export async function main(
   await jotform.moveToFolder(process.env.JOTFORM_CUF_FOLDER_ID);
   return {
     body: JSON.stringify({
-      url: `${jotform.jotformUrl}?testerId={Profile.id}`,
+      url: `${jotform.jotformUrl}?testerId={Extra.crypted_id}`,
     }),
     headers: defaultHeaders,
     statusCode: 200,
