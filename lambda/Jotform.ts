@@ -196,7 +196,7 @@ class Jotform {
         {
           buttonText: "START",
           isActive: "1",
-          logo: "https://icons.jotfor.ms/cardforms/assets/icons/icon-sets-v2/solid/Hardware/jfc_icon_solid-computer.svg",
+          logo: "https://www.jotform.com/uploads/AppQuality/form_files/Group%201402.62e4008c96bc24.95736921.svg",
           showQuestionCount: "Yes",
           subTitle: "Hi there, please fill out and submit this form.",
           title: "Welcome",
@@ -205,11 +205,15 @@ class Jotform {
       type: "CARD",
       isEUForm: "1",
       formType: "cardForm",
-      themeID: "59647bf8cf3bfe639c0b7cb1",
+      themeID: "62e3f72e87750700ab148691",
+      themeRevisionID: "62e3f72e87750700ab148692",
       autoStyleFromBgImage: "Yes",
+      styleJSON:
+        '{"pageBg-image":"https://www.jotform.com/uploads/AppQuality/form_files/Group%201606.62e3fda12e1286.10913009.png","pageBg-video":"","thankYouPage-bgColor":"#007ce2","thankYou-descColor":"#ffffff","thankYou-titleColor":"#ffffff","welcomePage-bgColor":"#7100D2"}',
       clearFieldOnHide: "disable",
       defaultTheme: "v2",
       optioncolor: "%23000",
+      owner: "AppQuality",
     };
   }
 
