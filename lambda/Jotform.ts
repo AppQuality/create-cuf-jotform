@@ -66,7 +66,7 @@ class Jotform {
     );
   }
 
-  private getCreateFormUrl(body: FormBody): string {
+  public getCreateFormUrl(body: FormBody): string {
     return (
       this.formUrl +
       `?` +

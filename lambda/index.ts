@@ -37,6 +37,23 @@ export async function main(
   }
 
   const jotform = new Jotform(process.env.JOTFORM_API_KEY);
+
+  try {
+    const completedUrl = jotform.getCreateFormUrl(body);
+    if (completedUrl.length > 7700) {
+      throw new Error("TOO_LONG_REQUEST: Failed to create form.");
+    }
+  } catch (e) {
+    return {
+      body: JSON.stringify({
+        error: "INVALID_BODY",
+        message: (e as { message: string }).message,
+      }),
+      headers: defaultHeaders,
+      statusCode: 431,
+    };
+  }
+
   await jotform.create(body);
   await jotform.setThankYouPage(process.env.THANKYOU_PAGE_REDIRECT_URL);
   await jotform.moveToFolder(process.env.JOTFORM_CUF_FOLDER_ID);
