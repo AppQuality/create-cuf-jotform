@@ -111,7 +111,7 @@ class Jotform {
       type: "control_dropdown",
       emptyText: "Seleziona qualcosa",
       useCalculations: "Yes",
-      required: "Yes",
+      required: "No",
       options: this.convertListToPipedString(question.options, "name"),
       calcValues: this.convertListToPipedString(
         [{ id: "0" }, ...question.options],
@@ -132,6 +132,7 @@ class Jotform {
       }),
       type: "control_checkbox",
       useCalculations: "Yes",
+      required: "No",
       options: this.convertListToPipedString(question.options, "name"),
       calcValues: this.convertListToPipedString(question.options, "id"),
     };
@@ -158,7 +159,7 @@ class Jotform {
         order: question.order,
       }),
       type: "control_textbox",
-      required: "Yes",
+      required: "No",
     };
   }
 
