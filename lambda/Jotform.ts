@@ -109,7 +109,7 @@ class Jotform {
         order: question.order,
       }),
       type: "control_dropdown",
-      emptyText: "Seleziona qualcosa",
+      emptyText: "Choose an option",
       useCalculations: "Yes",
       required: "No",
       options: this.convertListToPipedString(question.options, "name"),
